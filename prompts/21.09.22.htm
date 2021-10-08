@@ -69,7 +69,7 @@
   // const width = svg.attr("width");
   // const height = svg.attr("height");
   // const margin = {top: 10, right: 10, bottom: 50, left: 50};
-  // 
+  
   // const chartWidth = width - margin.left - margin.right;
   // const chartHeight = height - margin.top - margin.bottom;
   // 
@@ -99,28 +99,40 @@
   console.log(data)
   data.forEach( d => {
     // Do we need to fix anything in our dataset?
-    
+    d['worldwide_gross'] = Number (d['worldwide+gross'].replace(/,/g, ""));
   });
   console.log(data)
 
 
   // 1. Building the scales we need
-  // const yearExtent = d3.extent(data, d => d['year']);
-  // const yearScale = d3.scaleLinear().domain(yearExtent).range([0, chartWidth]);
-  // 
-  // const grossExtent = d3.extent(data, d => d['worldwide_gross']);
-  // const grossScale = d3.scaleLog().domain(grossExtent).range([chartHeight, 0]);
-  // 
-  // const imdbExtent = d3.extent(data, d => d['imdb_rating']);
-  // const imdbScale = d3.scaleLinear().domain(imdbExtent).range([3,8]);
+  const yearExtent = d3.extent(data, d => d['year']);
+  const yearScale = d3.scaleLinear().domain(yearExtent).range([0, chartWidth]);
+  
+  const grossExtent = d3.extent(data, d => d['worldwide_gross']);
+  const grossScale = d3.scaleLog().domain(grossExtent).range([chartHeight, 0]);
+  
+  const imdbExtent = d3.extent(data, d => d['imdb_rating']);
+  const imdbScale = d3.scaleLinear().domain(imdbExtent).range([3,8]);
   
   
   
   // 2. Draw some axes, make them fancy through using tickFormat
   //   Look at the documentation for d3.format to see all of the different options
   //       d3 tickformatting: https://github.com/d3/d3-format
+
+  let leftAxis = d3.axisLeft(grossScale)
+  let leftGridLines = d3.axisLeft(grossScale)
+                        .tickFormat("")
+                        .tickSize(-chartHeight - 10)
+  annotations.append("g")
+              .attr("class", "y axis")
+              .attr("transform" ,`translate(${margin.left - 10},${margin.top}`);
   
-  
+  annotations.appennd("g")
+      .attr("class", "y gridlines")
+        .attr( "transform", `translate(${margin.left - 10},${margin.top})`)
+        .call(leftGridLines);
+      
   
   
   
